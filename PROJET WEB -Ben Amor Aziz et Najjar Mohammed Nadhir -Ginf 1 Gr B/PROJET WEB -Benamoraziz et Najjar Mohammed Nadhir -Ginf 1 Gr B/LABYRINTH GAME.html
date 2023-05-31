@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labyrinth Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!--Game Title-->
+  <div class="title" id="titler">
+    <h1>Labyrinth Game</h1>
+  </div>
+  <!-- game settings -->
+  <form id="settings" action="" style="border: 1px solid rgb(96, 245, 245);background-color: rgb(35, 34, 34);">
+    <div class="container">
+      <div id="submit" class="htp" style="width: 100px;cursor: pointer;border-color: aqua;">New Game</div>
+    </div>
+    <div class="container">
+      <div id="submit1" class="htp" style="width: 100px;cursor: pointer;border-color: aqua;">How To Play</div>
+    </div>
+    <div class="container">
+      <div id="music" class="htp" style="width: 100px;cursor: pointer;border-color: aqua;">music On</div>
+    </div>
+    <div class="container">
+      <div class="htp"   style="width: 100px;cursor: pointer;border-color: aqua;height:33px;border-radius:9px;padding-top:4px;">Select Level</div>
+    </div>
+    <div class="container">
+      <input type="radio" id="easy" name="drone" value="easy" checked>
+      <label for="easy">Easy</label>
+    </div>
+    <div class="container">
+      <input type="radio" id="medium" name="drone" value="medium">
+      <label for="medium">Medium</label>
+    </div>
+    <div class="container">
+      <input type="radio" id="hard" name="drone" value="hard">
+      <label for="hard">Hard</label>
+    </div>
+    <div class="container">
+      <input type="radio" id="custom" name="drone" value="custom">
+      <label for="custom">Custom Mode</label>
+    </div>
+  </form>
+    <!-- Custom game settings -->
+  <div id="customs" style="background-color:rgb(35, 34, 34);height:450px;margin-top:60px;border-color: aqua;">
+    <div>
+      <span>Time (seconds)</span>
+      <input id="Time" type="number" value="120" />
+    </div>
+    <div>
+      <span>Rows/Columns</span>
+      <input id="number" type="number" value="35" />
+    </div>
+    <div>
+      <span>Malus/Bonus</span>
+      <input type="radio" id="yes" name="yn" value="yes">
+      <label for="yes">Yes</label>
+      <input type="radio" id="no" name="yn" value="no" checked>
+      <label for="no">No</label>
+      <div id="loot">
+        <span>nb.max chests</span>
+        <input id="maxchest" type="number" value="30" /></br>
+        <span>nb.min chests</span>
+        <input id="minchest" type="number" value="20" /></br>
+        <span>nb.max hourglasses</span>
+        <input id="maxhour" type="number" value="5" /></br>
+        <span>nb.min hourglasses</span>
+        <input id="minhour" type="number" value="1" /></br>
+        <span>nb.max errors</span>
+        <input id="maxquest" type="number" value="8" /></br>
+        <span>nb.min errors</span>
+        <input id="minquest" type="number" value="4" /></br>
+        <span>nb.max gold</span>
+        <input id="maxgold" type="number" value="5" /></br>
+        <span>nb.min gold</span>
+        <input id="mingold" type="number" value="2" /></br>
+      </div>
+    </div>
+    <div>
+      <span>ennemies</span>
+      <input type="radio" id="yes1" name="yn1" value="yes">
+      <label for="yes1">Yes</label>
+      <input type="radio" id="no1" name="yn1" value="no" checked>
+      <label for="no1">No</label>
+      <div id="skull" style="display:none">
+        <span>nb.max ennemies</span>
+        <input id="maxskull" type="number" value="10" /></br>
+        <span>nb.min ennemies</span>
+        <input id="minskull" type="number" value="3" />
+      </div>
+    </div>
+    <div id="submit3" style="width:60px">Back</div>
+  </div>
+
+  <!-- Game instructions -->
+  <div id="instructions" action=""
+    style="background-color:rgb(35, 34, 34);height:450px;margin-top:60px;border-color: aqua;height: 500px;">
+    <div>
+      <span style="font-weight:600 ; font-size:larger">Controls :</span></br> Left,Right,Up and Down Arrows to move the
+      player</br>
+      Goal : You have to reach one of the three exits .
+      </br></br>
+      <span style="font-weight:600 ; font-size:larger">How to dodge ennemies?</span></br>
+      player velocity needs to be higher than ennemies refresh rate (800ms)</br></br>
+      <span style="font-weight:600 ; font-size:larger">Easy Mode</span></br>
+      you need to solve maze 25/25 in a shorter time of 2:00 min</br></br>
+      <span style="font-weight:600 ; font-size:larger">Medium Mode</span></br>
+      you need to solve maze 35/35 in a shorter time of 1:00 min </br>
+      the maze contains generated loot of malus/bonus </br></br>
+      <span style="font-weight:600 ; font-size:larger">Hard Mode</span></br>
+      in addition to the medium mode, a number of ennemies will spawn in the maze and start moving around</br>
+      you need to dodge them in order to complete your way out of the maze</br></br>
+      <span style="font-weight:600 ; font-size:larger">Score</span> </br>
+      The Harder The Mode , The Bigger The Reward
+    </div>
+    <div id="submit2" style="width:60px">Back</div>
+  </div>
+  <!-- InGame inteface -->
+  <div class="navbar" id="navbar">
+    <div class="Restart">Start</div>
+    <div class="score1">Score</div>
+    <div class="score"><span id="score">0</span></div>
+    <div class="Pause">Pause</div>
+    <div id="timerel" class="timer"></div>
+  </div>
+  <div id="gameover" class="modal">
+    <!-- Reload message -->
+    <div class="modal-content" style="height: 100px;">
+      <div class="modal-header">
+        <span class="close1"> </span> <span class="close">&times;</span>
+      </div>
+      <div class="modal-mid">
+        <h2>
+          <center>
+            <span style="font-weight:100;font-size:30px">your final score is :</span>
+            <span class="finalsc" style="font-weight:100;font-size:30px">0</span></br>
+            <span style="font-weight:100;font-size:30px"> Total of coins collected :</span>
+            <span class="finalco" style="font-weight:100;font-size:30px">0</span></br>
+            <span style="font-weight:100;font-size:30px"> Number of steps :</span>
+            <span class="finalmv" style="font-weight:100;font-size:30px">0</span>
+          </center>
+        </h2>
+      </div>
+      <div class="modal-footer">
+        <h2 id="demo" onmouseover="" style="cursor:pointer;font-size:14px;">Play Again?</h2>
+      </div>
+    </div>
+  </div>
+  <div id="pausing" class="modal1">
+    <!-- Pause -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close2"> </span> <span class="close">&times;</span>
+        <h2></h2>
+      </div>
+      <div class="modal-footer" style="background-color:aqua;border-radius:8px;">
+        <h2 id="resume" onmouseover="" style="cursor:pointer;font-size:15px;color:white;">Resume</h2>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    let nrows = 35;
+    let ncols = 35;
+    const snail = `<img src="snail.png" height="15px" width="15px"></div>`;
+    const gold = `<img src="gold.png" height="15px" width="15px"></img>`;
+    const question = `<img src="Question.png" height="15px" width="15px"></img>`;
+    const death = `<img src="Death_skull.png" height="15px" width="15px"></img>`;
+    const glass = `<img src="hourglass.png" height="15px" width="15px"></img>`;
+    const chest = `<img src="chest.png" height="15px" width="15px"></img>`;
+    const score1 = document.querySelector('#score');
+    /////////sends HTML code of divs and rows to compose all cells
+    function createCells() {
+      for (let i = 0; i < nrows; i++) {
+        let row = document.createElement("div");
+        row.classList.add("row");/////////////////adds class="row" to the element row///////
+        if (i === 0) {
+          row.classList.add("first-row");
+        }          //////////the first row needs the class first-row/////////
+        document.body.appendChild(row);/////////puts the element row inside <body>///////////
+        //////now all rows are set////////////////we need the devide each row with the cols to compose cells
+        for (let j = 0; j < ncols; j++) {
+          let col = document.createElement("div");
+          col.classList.add("cell");
+          if (j === 0)
+            col.classList.add("first-col");
+          row.appendChild(col);
+        }
+      }
+    }
+    ///////////////calling function : creating table cell by cell in html code (cells are all empty)
+    ////////defining the empty cells by the top left right and buttom  borders
+    //each cell have #row ,#col,[2-4]neighbors,4 walls,check if visited/////
+    ////method 1 (show) : hides the cell walls + mark the cell if its checked
+    //// method 2 (createNeighbors) : if the cell isn't in the borders of the map then we are free to link it with its 4 neighbors , however if it is in the edge the it's gonna miss one or two neighbors
+    // method 3 (fix) : fix for the left to right turns or right to left
+    class Cell {
+      constructor(i, j) {
+        this.r = i;
+        this.c = j;
+        this.neighbors = [];
+        this.walls = [true, true, true, true]; //Top Right Bottom Left
+        this.visited = false;
+      }
+      show() {
+        if (!this.walls[0])
+          cellElements[this.r * ncols + this.c].style["border-top"] = "none";
+        if (!this.walls[1])
+          cellElements[this.r * ncols + this.c].style["border-right"] = "none";
+        if (!this.walls[2])
+          cellElements[this.r * ncols + this.c].style["border-bottom"] = "none";
+        if (!this.walls[3])
+          cellElements[this.r * ncols + this.c].style["border-left"] = "none";
+
+        if (this.visited)
+          cellElements[this.r * ncols + this.c].style.background = "greenblue";
+      }
+      createNeighbors() {
+        if (this.r > 0)
+          this.neighbors.push(grid[(this.r - 1) * ncols + this.c]); //Top
+        if (this.c < ncols - 1)
+          this.neighbors.push(grid[this.r * ncols + (this.c + 1)]); //Right
+        if (this.r < nrows - 1)
+          this.neighbors.push(grid[(this.r + 1) * ncols + this.c]); //Bottom
+        if (this.c > 0)
+          this.neighbors.push(grid[this.r * ncols + (this.c - 1)]); //Left
+      }
+      fix() {
+        if (!this.walls[1] && !this.walls[2])
+          cellElements[this.r * ncols + this.c].classList.add("bottomRightCorner");
+      }
+    }
+    let grid = [];
+    //defining cells+creating neighbors for each
+    function fillGrid() {
+      for (let i = 0; i < nrows; i++) {
+        for (let j = 0; j < ncols; j++) {
+          grid.push(new Cell(i, j));
+        }
+      }
+      for (let i = 0; i < nrows; i++) {
+        for (let j = 0; j < ncols; j++) {
+          grid[i * ncols + j].createNeighbors();
+        }
+      }
+    }
+    //////////////////audio function
+    function sound(src) {
+      this.sound = document.createElement("audio");
+      this.sound.classList.add("myAudio");
+      this.sound.src = src;
+      this.sound.setAttribute("preload", "auto");
+      this.sound.setAttribute("controls", "none");
+      this.sound.style.display = "none";
+      document.body.appendChild(this.sound);
+      this.play = function () {
+        this.sound.play();
+      }
+      this.volume = function () {
+        this.sound.volume = 0.2;
+      }
+      this.stop = function () {////////////doesn't work (-_-)
+        this.sound.pause();
+      }
+    }
+    let track1 = new sound("Abakus - Chips Challenge.mp3");
+    let track2 = new sound("Abakus - Evolving Light Geoms.mp3");
+    let track3 = new sound("Abakus - K-Hole.mp3");
+    let track4 = new sound("Abakus - Sudden Rush.mp3");
+    let track5 = new sound("Abakus - The Sleeper Must Awaken.mp3");
+    let key = [track1, track2, track3, track4, track5];
+    let queue = Math.floor(Math.random() * 5);
+    let spin1;
+    let spin2;
+    let sfx = document.querySelector("#music");
+    let sus = 0;
+    //////bg music pressed
+    sfx.addEventListener("click", function () {
+      if (sus == 0) {
+        spin1 = key[Math.floor(Math.random() * 5)];
+        spin1.volume();
+        spin1.play();
+        sus++;
+      }
+      sfx.addEventListener("mouseenter", function () {
+        abonus = new sound("coin.wav")
+        abonus.volume();
+        abonus.play();
+
+      });
+    });
+    let cellElements = document.querySelectorAll(".cell");
+    let current = grid[0];
+    let stack = [];
+    let play = false;
+    let sortie1 = 1 + Math.floor(Math.random() * (nrows - 1));
+    let sortie2 = 1 + Math.floor(Math.random() * (nrows - 1));
+    let goal1;
+    let goal2;
+    let goal3;
+    let holder = [];
+    let bonuser = [];
+    let golder = [];
+    let QnA = []
+    let glasser = [];
+    let ennemies = [];
+    function search() {
+      cellElements[current.r * ncols + current.c].style.background = "black";
+      if (!current.visited) {
+        current.visited = true;
+        stack.push(current);
+      }
+      let unvisited = [];
+      for (let neigh of current.neighbors) {
+        if (!neigh.visited) {
+          unvisited.push(neigh);
+        }
+      }
+      if (unvisited.length > 0) {
+        let randomIndex = Math.floor(Math.random() * unvisited.length);
+        let next = unvisited[randomIndex];
+        //////Removing Walls clearing path
+        if (current.r - next.r === 1) {
+          //TOP
+          current.walls[0] = false;
+          next.walls[2] = false;
+        } else if (current.c - next.c === -1) {
+          //RIGHT
+          current.walls[1] = false;
+          next.walls[3] = false;
+        } else if (current.r - next.r === -1) {
+          //BOTTOM
+          current.walls[2] = false;
+          next.walls[0] = false;
+        } else if (current.c - next.c === 1) {
+          //LEFT
+          current.walls[3] = false;
+          next.walls[1] = false;
+        }
+        current = next;
+      } else if (stack.length > 0) {
+        current = stack.pop();
+      } else {////////////////////the maze map is ready to play and all cells are checked
+        play = true;
+        ////////////generating three exits in the last col of the maze 
+        goal3 = grid[nrows * ncols - 1];
+        cellElements[((nrows - 1) * (ncols) + ncols - 1)].style["border-right"] = "none";
+        while (sortie1 == nrows - 2) {
+          sortie1 = 1 + Math.floor(Math.random() * (nrows - 1));
+          goal1 = grid[((sortie1 - 1) * (ncols) + ncols - 1)];
+        }
+        cellElements[((sortie1 - 1) * (ncols) + ncols - 1)].style["border-right"] = "none";
+        while (sortie2 == nrows - 2 || sortie2 == sortie1) {
+          sortie2 = 1 + Math.floor(Math.random() * (nrows - 1));
+          goal2 = grid[((sortie2 - 1) * (ncols) + ncols - 1)];
+        }
+        cellElements[((sortie2 - 1) * (ncols) + ncols - 1)].style["border-right"] = "none";
+        ////////////entrance from the first cell
+        cellElements[0].style["border-left"] = "none";
+        cellElements[current.r * ncols + current.c].innerHTML = snail;
+      }
+    }
+    ///////////////////animation that show the new modification --------> the creation of the path /render
+    function animate() {
+      for (let i = 0; i < nrows; i++) {
+        for (let j = 0; j < ncols; j++) {
+          grid[i * ncols + j].show();
+          grid[i * ncols + j].fix();
+        }
+      }
+      ///////calling for maze generator algo--------->generate next mvt using backtrackingDFS algo
+      search();
+    }
+    /////////////GAME INTERFACE
+    let starter = document.querySelector("#submit");
+    let instractor = document.querySelector("#submit1");
+    let flip = document.querySelector("#submit2");
+    let flip1 = document.querySelector("#submit3");
+    let instract = document.querySelector('#instructions');
+    let bar = document.querySelector("#navbar");
+    let form = document.querySelector("#settings");
+    let rowsCols = document.querySelector("#number");
+    let mytime = document.querySelector("#Time");
+    let minchest1 = document.querySelector("#minchest");
+    let minhour1 = document.querySelector("#minhour");
+    let minquest1 = document.querySelector("#minquest");
+    let mingold1 = document.querySelector("#mingold");
+    let maxchest1 = document.querySelector("#maxchest");
+    let maxhour1 = document.querySelector("#maxhour");
+    let maxquest1 = document.querySelector("#maxquest");
+    let maxgold1 = document.querySelector("#maxgold");
+    let maxskull1 = document.querySelector("#maxskull");
+    let minskull1 = document.querySelector("#minskull");
+    let rest = 0;
+    let mode;
+    let score = 0;
+    let mvt = 0;
+    let coin = 0;
+    let minchest = document.querySelector("#minchest").value;
+    let minhour = document.querySelector("#minhour").value;
+    let minquest = document.querySelector("#minquest").value;
+    let mingold = document.querySelector("#mingold").value;
+    let maxchest = document.querySelector("#maxchest").value;
+    let maxhour = document.querySelector("#maxhour").value;
+    let maxquest = document.querySelector("#maxquest").value;
+    let maxgold = document.querySelector("#maxgold").value;
+    let maxskull = document.querySelector("#maxskull").value;
+    let minskull = document.querySelector("#minskull").value;
+    var customs = document.getElementById('customs');
+    custom.addEventListener("click", function () {
+      customs.style.display = "block";
+      form.style.display = "none";
+    });
+    cus = setInterval(function () {
+      var loot = document.getElementById('loot')
+      if (document.getElementById('yes').checked)
+        loot.style.display = "block";
+      else
+        loot.style.display = "none";
+      var saik = document.getElementById('skull')
+      if (document.getElementById('yes1').checked)
+        saik.style.display = "block";
+      else
+        saik.style.display = "none";
+    }, 0);
+    ////////instruction button pressed
+    instractor.addEventListener("click", function () {
+      abonus = new sound("botton.wav")
+      abonus.play();
+      form.style.display = "none";
+      instract.style.display = "block"
+    });
+    starter.addEventListener("mouseenter", function () {
+      abonus = new sound("coin.wav");
+      abonus.volume();
+      abonus.play();
+
+
+    });
+    instractor.addEventListener("mouseenter", function () {
+      abonus = new sound("coin.wav")
+      abonus.volume();
+      abonus.play();
+
+    });
+    flip.addEventListener("mouseenter", function () {
+      abonus = new sound("coin.wav")
+      abonus.volume();
+      abonus.play();
+
+    });
+    flip1.addEventListener("mouseenter", function () {
+      abonus = new sound("coin.wav")
+      abonus.volume();
+      abonus.play();
+
+    });
+
+
+    ////////back button pressed
+    flip.addEventListener("click", function () {
+      abonus = new sound("botton.wav")
+      abonus.play();
+      instract.style.display = "none";
+      form.style.display = "block"
+    });
+    flip1.addEventListener("click", function () {
+      let testor = true;
+      if (rowsCols == "") {
+        testor = false;
+        return alert("Please enter rows/Cols");
+      }
+      if (mytime == "") {
+        testor = false;
+        return alert("Please enter TIME");
+      }
+      let number = rowsCols.value;
+      if (number > 100) {
+        testor = false;
+        alert("Maze too large!");
+        return;
+      }
+      else if (number < 15) {
+        testor = false;
+        alert("Maze too small!");
+        return;
+      }
+      let time = mytime.value;
+      if (time > 500) {
+        testor = false;
+        alert("Too much time!");
+        return;
+      }
+      else if (time < 30) {
+        testor = false;
+        alert("Give more time");
+        return;
+      }
+      if (minchest1 == "" || minhour1 == "" || minquest1 == "" || mingold1 == "" || maxchest1 == "" || maxhour1 == "" || maxquest1 == "" || maxgold1 == "" || maxskull1 == "" || minskull1 == "") {
+        testor = false;
+        return alert("Please enter All loot inputs");
+      }
+      if (minchest1.value < 0 || minhour1.value < 0 || minquest1.value < 0 || mingold1.value < 0 || minskull1.value < 0) {
+        testor = false;
+        alert("Wrong loot input<0!");
+        return;
+      }
+      if (maxchest1.value > 40 || maxhour1.value > 40 || maxquest1.value > 40 || maxgold1.value > 40 || maxskull1.value > 40) {
+        testor = false;
+        alert("too Much loot!");
+        return;
+      }
+      if (Math.floor(maxchest1.value) < Math.floor(minchest1.value) || Math.floor(maxhour1.value) < Math.floor(minhour1.value) || Math.floor(maxquest1.value) < Math.floor(minquest1.value) || Math.floor(maxgold1.value) < Math.floor(mingold1.value) || Math.floor(maxskull1.value) < Math.floor(minskull1.value)) {
+        testor = false;
+        alert("MIN>MAX ERROR!");
+        return;
+      }
+      if (testor == true) {
+        minchest = Math.floor(minchest1.value);
+        minhour = Math.floor(minhour1.value);
+        minquest = Math.floor(minquest1.value);
+        mingold = Math.floor(mingold1.value);
+        maxchest = Math.floor(maxchest1.value);
+        maxhour = Math.floor(maxhour1.value);
+        maxquest = Math.floor(maxquest1.value);
+        maxgold = Math.floor(maxgold1.value);
+        maxskull = Math.floor(maxskull1.value);
+        minskull = Math.floor(minskull1.value);
+        nrows = Math.floor(number);
+        ncols = Math.floor(number);
+        duration = Math.floor(time);
+        abonus = new sound("botton.wav")
+        abonus.play();
+        customs.style.display = "none";
+        form.style.display = "block";
+      }
+    });
+    ////////start button pressed
+    starter.addEventListener("click", function () {
+      abonus = new sound("botton.wav")
+      bar.style.display = "flex";
+      abonus.play();
+      clearInterval(cus);
+      ////////////settings
+      titler.style.display = "none";
+      form.style.display = "none";
+      const radioButtons = document.querySelectorAll('input[name="drone"]');
+      for (const radioButton of radioButtons) {
+        if (radioButton.checked) {
+          mode = radioButton.id;
+          break;
+        }
+      }
+      if (mode == "medium") {
+        duration = 90;
+        ncols = 35;
+        nrows = 35;
+
+      }
+      if (mode == "hard") {
+        duration = 60;
+        ncols = 35;
+        nrows = 35;
+        minchest = 15;
+        minhour = 10;
+        minquest = 5;
+        mingold = 5;
+        maxchest = 25;
+        maxhour = 25;
+        maxquest = 10;
+        maxgold = 10;
+        maxskull = 10;
+        minskull = 3;
+      }
+      ////////////calling for game engine
+      //1)creation+printing of cells nclos*nrows
+      createCells();
+      let comm = document.createElement("h6");
+      comm.setAttribute("id", "comms");
+      comm.textContent = "Press Enter to win!";
+      document.body.appendChild(comm);
+      cellElements = document.querySelectorAll(".cell");
+      grid = [];
+      //2)defining cells +neighbors----------> marking current as first cell
+      fillGrid();
+      current = grid[0];
+      stack = [];
+      sortie1 = 1 + Math.floor(Math.random() * (nrows - 1));
+      sortie2 = 1 + Math.floor(Math.random() * (nrows - 1));
+      ////////////resetting content / clearing all cells's content
+      for (let i = 0; i < nrows; i++) {
+        for (let j = 0; j < ncols; j++) {
+          cellElements[i * ncols + j].removeAttribute("style");
+          cellElements[i * ncols + j].classList.remove("bottomRightCorner");
+          cellElements[i * ncols + j].innerHTML = "";
+        }
+      }
+      ////////resetting all variables
+      grid = [];
+      fillGrid();
+      current = grid[0];
+      stack = [];
+      //////////setting goals
+      goal1 = grid[((sortie1 - 1) * (ncols) + ncols - 1)];
+      goal2 = grid[((sortie2 - 1) * (ncols) + ncols - 1)];
+      goal3 = grid[nrows * ncols - 1];
+      //3)generating full maze with while loop
+      /////////////if map is ready then start game
+      while (!play) {
+        animate();
+      }
+      if (mode == "medium" || mode == "hard" || (document.getElementById('yes').checked && document.getElementById('custom').checked)) {
+        /////////////////generating loot
+        var i = 0;
+        let j = 0;
+        let bonus = grid[0];
+        j = minchest + Math.floor(Math.random() * (maxchest - minchest));//generate number between minchest and maxchest !
+        while (i<j) {
+          bonus = grid[(Math.floor(Math.random() * (ncols * nrows) - 1)) + 1];
+          if (!holder.includes(bonus) && bonus != grid[0]) {
+            holder.push(bonus);
+            bonuser.push(bonus);
+            cellElements[bonus.r * ncols + bonus.c].innerHTML = chest;
+            i++;
+          }
+        }
+        j = mingold + Math.floor(Math.random() * (maxgold - mingold));
+        i = 0;
+        while (i<j) {
+          bonus = grid[(Math.floor(Math.random() * (ncols * nrows) - 1)) + 1];
+          if (!holder.includes(bonus) && bonus != grid[0]) {
+            holder.push(bonus);
+            golder.push(bonus);
+            cellElements[bonus.r * ncols + bonus.c].innerHTML = gold;
+            i++;
+          }
+        }
+        j = minquest + Math.floor(Math.random() * (maxquest - minquest));
+        i = 0;
+        while (i<j) {
+          bonus = grid[(Math.floor(Math.random() * (ncols * nrows) - 1)) + 1];
+          if (!holder.includes(bonus) && bonus != grid[0]) {
+            holder.push(bonus);
+            QnA.push(bonus);
+            cellElements[bonus.r * ncols + bonus.c].innerHTML = question;
+            i++;
+          }
+        }
+        j = maxhour + Math.floor(Math.random() * (maxhour - minhour));
+        i = 0;
+        while (i<j) {
+          bonus = grid[(Math.floor(Math.random() * (ncols * nrows) - 1)) + 1];
+          if (!holder.includes(bonus) && bonus != grid[0]) {
+            holder.push(bonus);
+            glasser.push(bonus);
+            cellElements[bonus.r * ncols + bonus.c].innerHTML = glass;
+            i++;
+          }
+        }
+      }
+      if (mode == "hard" || (document.getElementById('yes1').checked && document.getElementById('custom').checked)) {
+        j = minskull + Math.floor(Math.random() * (maxskull - minskull));
+        i = 0;
+        while (i<j) {
+          bonus = grid[(Math.floor(Math.random() * (ncols * nrows) - 1)) + 1];
+          if (!ennemies.includes(bonus) && !holder.includes(bonus) && bonus != grid[0]) {
+            ennemies.push(bonus);
+            cellElements[bonus.r * ncols + bonus.c].innerHTML = death;
+            i++;
+          }
+        }
+        ///generating ennemies mvt
+        for (let x in ennemies) {
+          let latest1;
+          let current1;
+          let t = 0;
+          let recent;
+          function AI() {
+            if (play) {
+              if (typeof latest1 == "undefined") {
+                latest1 = current1;
+              }
+              if (typeof recent == "undefined") {
+                recent = ``;
+              }
+              let k = Math.floor(Math.random() * 4) + 1;
+              if (k == 1 && !current1.walls[0]) {
+                current1 = grid[(current1.r - 1) * ncols + current1.c];
+                cellElements[latest1.r * ncols + latest1.c].innerHTML = recent;
+                latest1 = current1;
+                ennemies.splice(t, 1, current1);
+                recent = cellElements[current1.r * ncols + current1.c].innerHTML;
+                cellElements[current1.r * ncols + current1.c].innerHTML = death;
+              }
+              if (k == 2 && !current1.walls[1]) {
+                current1 = grid[current1.r * ncols + (current1.c + 1)];
+                cellElements[latest1.r * ncols + latest1.c].innerHTML = recent;
+                latest1 = current1;
+                ennemies.splice(t, 1, current1);
+                recent = cellElements[current1.r * ncols + current1.c].innerHTML;
+                cellElements[current1.r * ncols + current1.c].innerHTML = death;
+              }
+              if (k == 3 && !current1.walls[2]) {
+                current1 = grid[(current1.r + 1) * ncols + current1.c];
+                cellElements[latest1.r * ncols + latest1.c].innerHTML = recent;
+                latest1 = current1;
+                ennemies.splice(t, 1, current1);
+                recent = cellElements[current1.r * ncols + current1.c].innerHTML;
+                cellElements[current1.r * ncols + current1.c].innerHTML = death;
+              }
+              if (k == 4 && !current1.walls[3]) {
+                current1 = grid[current1.r * ncols + (current1.c - 1)];
+                cellElements[latest1.r * ncols + latest1.c].innerHTML = recent;
+                latest1 = current1;
+                ennemies.splice(t, 1, current1);
+                recent = cellElements[current1.r * ncols + current1.c].innerHTML;
+                cellElements[current1.r * ncols + current1.c].innerHTML = death;
+              }
+              if (current == current1) {
+                play = false;
+                modal.style.display = "block";
+                x = document.querySelector(".close1");
+                x.textContent = "Game Over";
+                y = document.querySelector(".finalco");
+                y.innerHTML = coin;
+                y = document.querySelector(".finalmv");
+                y.innerHTML = mvt;
+                abonus = new sound("loss.wav")
+                abonus.play();
+              }
+            }
+          }
+          current1 = ennemies[x];
+          console.log(current1);
+          AI();
+          setInterval(AI, 800);
+          if (!play)
+            clearInterval(AI);
+        }
+      }
+      play = false;
+    });
+    let duration = 120;
+    let s = 0;
+    ///////////starting timer
+    function reset2() {
+      abonus = new sound("botton.wav")
+      abonus.play();
+      /////////////////////TIMER
+      //////////var now = new Date().getTime();
+      function time() {
+        if (play) {
+          duration = duration1 - (((Date.now() - start) / 1000) | 0);
+          minutes = (duration / 60) | 0;
+          seconds = (duration % 60) | 0;
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+          document.querySelector("#timerel").textContent = "Game ends in " + minutes + ":" + seconds;
+          if (duration <= 0) {
+            document.querySelector("#timerel").textContent = "Time's up";
+            start = Date.now() + 1000;
+            play = false;
+            modal.style.display = "block";
+            x = document.querySelector(".close1");
+            x.textContent = "Game Over";
+            y = document.querySelector(".finalco");
+            y.innerHTML = coin;
+            y = document.querySelector(".finalmv");
+            y.innerHTML = mvt;
+            abonus = new sound("loss.wav")
+            abonus.play();
+          }
+          if (duration == 11) {
+            abonus = new sound("tiktok.wav")
+            abonus.play();
+          }
+        }
+      }
+      var start = Date.now(),
+        minutes,
+        seconds,
+        duration1;
+      duration1 = duration;
+      if (s == 0) {
+        play = true;
+        time();
+        btn.innerHTML = `Restart`;
+        lol = setInterval(time, 1000);
+      }
+      else
+        document.location.reload();
+      s++;
+    }
+    //////////////restart button pressed
+    let btn = document.querySelector(".Restart");
+    btn.addEventListener("click", reset2);
+    ///////////////controls////////mouvement
+    var bob;
+    var sg = 0;
+    let dur = duration;
+    document.body.addEventListener("keydown", function (event) {
+      let latest = current;
+      if (play) {
+        cellElements[current.r * ncols + current.c].innerHTML = ``;
+        if (event.key === "ArrowUp" || event.key === "z" || event.key === "Z") upArrowPressed();
+        if (event.key === "ArrowLeft" || event.key === "q" || event.key === "Q") leftArrowPressed();
+        if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") rightArrowPressed();
+        if (event.key === "ArrowDown" || event.key === "s" || event.key === "S") downArrowPressed();
+        if (latest != current) {
+          amove = new sound("move.wav")
+          amove.play();
+          ////////////////score calculus here
+          if (bonuser.includes(current)) {
+            abonus = new sound("coin.wav")
+            abonus.play();
+            coin += 1;
+            score += 100;
+            var Index = bonuser.indexOf(current);
+            bonuser.splice(Index, 1);
+          }
+          if (QnA.includes(current)) {
+            abonus = new sound("malus1.wav")
+            abonus.play();
+            score -= 300;
+            var Index = QnA.indexOf(current);
+            QnA.splice(Index, 1);
+          }
+          if (golder.includes(current)) {
+            abonus = new sound("malus.wav")
+            abonus.play();
+            coin += 1;
+            let w = Math.floor(Math.round(Math.random()) * 2 - 1)
+            if (w == 1)
+              score += 300;
+            else
+              score -= 300;
+            var Index = golder.indexOf(current);
+            golder.splice(Index, 1);
+            cellElements[current.r * ncols + current.c].innerHTML = ``;
+            current = grid[0];
+          }
+          if (glasser.includes(current)) {
+            abonus = new sound("bonus.wav")
+            abonus.play();
+            clearInterval(lol);
+            var Index = glasser.indexOf(current);
+            glasser.splice(Index, 1);
+            if (sg == 1) {
+              clearInterval(bob);
+              duration = dur;
+            }
+            duration += 5;
+            //////////////////resetting time function
+            dur = duration;
+            var start = Date.now(),
+              minutes,
+              seconds,
+              duration1;
+            duration1 = duration;
+            function time1() {
+              sg = 1;
+              if (play) {
+                dur = duration1 - (((Date.now() - start) / 1000) | 0);
+                minutes = (dur / 60) | 0;
+                seconds = (dur % 60) | 0;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                document.querySelector("#timerel").textContent = "Game ends in " + minutes + ":" + seconds;
+                if (dur <= 0) {
+                  document.querySelector("#timerel").textContent = "Time's up";
+                  start = Date.now() + 1000;
+                  play = false
+                  modal.style.display = "block";
+                  x = document.querySelector(".close1");
+                  x.textContent = "Game Over";
+                  y = document.querySelector(".finalco");
+                  y.innerHTML = coin;
+                  y = document.querySelector(".finalmv");
+                  y.innerHTML = mvt;
+                  abonus = new sound("loss.wav")
+                  abonus.play();
+                }
+                if (dur == 12) {
+                  abonus = new sound("tiktok.wav")
+                  abonus.play();
+                }
+              }
+            }
+            time1();
+            bob = setInterval(time1, 1000);
+          }
+          mvt += 1;
+          score1.innerHTML = score;
+        }
+        cellElements[current.r * ncols + current.c].innerHTML = snail;
+        checkWin();
+      }
+    });
+    // each of these functions whill change current if mvt is possible
+    function upArrowPressed() {
+      if (!current.walls[0])
+        current = grid[(current.r - 1) * ncols + current.c];
+    }
+    function leftArrowPressed() {
+      if (!current.walls[3])
+        current = grid[current.r * ncols + (current.c - 1)];
+    }
+    function rightArrowPressed() {
+      if (!current.walls[1])
+        current = grid[current.r * ncols + (current.c + 1)];
+    }
+    function downArrowPressed() {
+      if (!current.walls[2])
+        current = grid[(current.r + 1) * ncols + current.c];
+    }
+    function checkWin() {
+      if (current === goal3 || current === goal1 || current === goal2) {
+        comms.style.display = "block";
+        let finsc = score + duration * 60 + mvt * 10 ;
+        if (mode == 'medium')
+          finsc = score * 2 + duration * 30 + mvt * 20 ;
+        if (mode == 'hard')
+          finsc = score * 2 + duration*10 + mvt * 40 ;
+        if (event.key === "Enter" && finsc >= 0) {
+          abonus = new sound("win.wav")
+          abonus.play();
+          setTimeout(function () {
+            modal.style.display = "block";
+            x = document.querySelector(".close1");
+            x.textContent = "Congrats! You Win"
+            modal.style.display = "block";
+            y = document.querySelector(".finalsc");
+            y.innerHTML = finsc;
+            y = document.querySelector(".finalco");
+            y.innerHTML = coin;
+            y = document.querySelector(".finalmv");
+            y.innerHTML = mvt;
+            abonus = new sound("finalscore.wav")
+            abonus.play();
+            play = false;
+          }, 1000);
+        }
+        if (event.key === "Enter" && !(finsc >= 0)) {
+          modal.style.display = "block";
+          x = document.querySelector(".close1");
+          y = document.querySelector(".finalco");
+          y.innerHTML = coin;
+          y = document.querySelector(".finalmv");
+          y.innerHTML = mvt;
+          abonus = new sound("loss.wav")
+          abonus.play();
+          x.textContent = "Game Over";
+          play = false;
+        }
+      }
+      else
+        comms.style.display = "none";
+    }
+    var modal = document.getElementById('gameover');
+    var titler = document.getElementById('titler');
+    var modal1 = document.getElementById('pausing');
+    var span = document.getElementsByClassName("close")[0];
+    crash = function () {
+      abonus = new sound("botton.wav")
+      abonus.play();
+      clearInterval(lol);
+      clearInterval(bob);
+      play = false;
+      modal1.style.display = "block";
+      x = document.querySelector(".close2");
+      x.textContent = "PAUSE"
+    }
+    let p = 0;
+    resumer1 = function () {
+      abonus = new sound("botton.wav")
+      abonus.play();
+      if (p == 0) {
+        p++;
+        play = true;
+        dur = duration;
+        var start = Date.now(),
+          minutes,
+          seconds,
+          duration1;
+        duration1 = duration;
+        function time1() {
+          sg = 1;
+          if (play) {
+            dur = duration1 - (((Date.now() - start) / 1000) | 0);
+            minutes = (dur / 60) | 0;
+            seconds = (dur % 60) | 0;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            document.querySelector("#timerel").textContent = "Game ends in " + minutes + ":" + seconds;
+            if (dur <= 0) {
+              document.querySelector("#timerel").textContent = "Time's up";
+              start = Date.now() + 1000;
+              play = false
+              modal.style.display = "block";
+              x = document.querySelector(".close1");
+              x.textContent = "Game Over";
+              y = document.querySelector(".finalco");
+              y.innerHTML = coin;
+              y = document.querySelector(".finalmv");
+              y.innerHTML = mvt;
+              abonus = new sound("loss.wav")
+              abonus.play();
+            }
+            if (dur == 12) {
+              abonus = new sound("tiktok.wav")
+              abonus.play();
+            }
+          }
+        }
+      }
+      else {
+        play = true;
+        duration = dur;
+        var start = Date.now(),
+          minutes,
+          seconds,
+          duration1;
+        duration1 = duration;
+        function time1() {
+          sg = 1;
+          if (play) {
+            dur = duration1 - (((Date.now() - start) / 1000) | 0);
+            minutes = (dur / 60) | 0;
+            seconds = (dur % 60) | 0;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            document.querySelector("#timerel").textContent = "Game ends in " + minutes + ":" + seconds;
+            if (dur <= 0) {
+              document.querySelector("#timerel").textContent = "Time's up";
+              start = Date.now() + 1000;
+              play = false
+              modal.style.display = "block";
+              x = document.querySelector(".close1");
+              x.textContent = "Game Over";
+              y = document.querySelector(".finalco");
+              y.innerHTML = coin;
+              y = document.querySelector(".finalmv");
+              y.innerHTML = mvt;
+            }
+          }
+        }
+      }
+      time1();
+      bob = setInterval(time1, 1000);
+      modal1.style.display = "none";
+    }
+    // pause button pressed
+    let pauser = document.querySelector(".Pause");
+    pauser.addEventListener("click", crash);
+    document.getElementById("resume").addEventListener("click", resumer1);
+    document.getElementById("demo").addEventListener("click", reset1);
+    function reset1() {
+      abonus = new sound("botton.wav");
+      abonus.play();
+      document.location.reload();
+    }
+    span.onclick = function () {
+      abonus = new sound("botton.wav");
+      abonus.play();
+      modal.style.display = "none";
+    }
+  </script>
+</body>
+<footer>
+  <p>© 2023-2022 Labyrinth Game v1.0 By Aziz&Mohammed</p>
+</footer>
+</html>
