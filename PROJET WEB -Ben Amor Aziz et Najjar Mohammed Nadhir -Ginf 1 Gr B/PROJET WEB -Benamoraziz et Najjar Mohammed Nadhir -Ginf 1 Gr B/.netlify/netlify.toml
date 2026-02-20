@@ -1,0 +1,36 @@
+headersOrigin = "config"
+plugins = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/home/aziz0220/MyProjects/PROJET WEB -Ben Amor Aziz et Najjar Mohammed Nadhir -Ginf 1 Gr B/PROJET WEB -Benamoraziz et Najjar Mohammed Nadhir -Ginf 1 Gr B/dist"
+publishOrigin = "config"
+commandOrigin = "config"
+base = "/home/aziz0220/MyProjects/PROJET WEB -Ben Amor Aziz et Najjar Mohammed Nadhir -Ginf 1 Gr B/PROJET WEB -Benamoraziz et Najjar Mohammed Nadhir -Ginf 1 Gr B"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
