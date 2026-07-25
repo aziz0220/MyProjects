@@ -1,8 +1,8 @@
 {
-  "name": "labyrinth-reborn",
+  "name": "labyrinth-game",
   "version": "2.0.0",
   "private": true,
-  "description": "Labyrinth Reborn game with modern UI and deploy-ready setup",
+  "description": "Labyrinth Game - a maze escape game with modern UI and deploy-ready setup",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
